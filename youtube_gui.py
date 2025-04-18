@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import re
 from PyQt6.QtWidgets import (
     QApplication,
     QWidget,
@@ -19,8 +20,12 @@ from PyQt6.QtWidgets import (
     QComboBox,  # Add QComboBox
     QRadioButton,  # Add QRadioButton
     QListView,  # Add QListView
+    QMenu,  # Import QMenu
 )
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import (
+    QIcon,
+    QAction,
+)  # Import QAction if needed for custom actions, though standard ones exist
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from downloader import YTVideoDownloader
 
@@ -150,6 +155,7 @@ class YouTubeDownloaderApp(QWidget):
 
         self.download_thread = None
         self.fetched_formats = []
+        self.current_video_title = None
         self.init_ui()
 
     def init_ui(self):
@@ -202,6 +208,12 @@ class YouTubeDownloaderApp(QWidget):
         self.url_input = QLineEdit()
         self.url_input.setPlaceholderText("https://www.youtube.com/watch?v=...")
         self.url_input.setMinimumHeight(35)
+        # --- Custom Context Menu for URL Input --- (NEW)
+        self.url_input.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.url_input.customContextMenuRequested.connect(
+            self.show_url_input_context_menu
+        )
+        # --- End Custom Context Menu Setup ---
         self.fetch_formats_button = QPushButton("Fetch Formats")  # NEW Button
         self.fetch_formats_button.clicked.connect(self.handle_fetch_formats)
         self.fetch_formats_button.setFixedHeight(35)
@@ -421,6 +433,36 @@ class YouTubeDownloaderApp(QWidget):
             QLabel#TitleLabel { font-size: 10pt; color: #212529; font-weight: 500; margin-top: 8px; margin-bottom: 2px; }
             QGroupBox QLabel { font-weight: normal; }
             QGroupBox QLabel b { font-weight: bold; }
+
+            /* --- Custom Context Menu Styling --- (NEW) */
+            QMenu {
+                background-color: #f8f9fa; /* Light background to match window */
+                border: 1px solid #ced4da; /* Similar border to GroupBox */
+                padding: 5px; /* Padding around items */
+                border-radius: 4px;
+            }
+            QMenu::item {
+                padding: 5px 20px 5px 20px; /* Padding for each item */
+                color: #212529; /* Dark text color */
+                border-radius: 3px; /* Slight rounding for hover */
+            }
+            QMenu::item:selected {
+                background-color: #e0e7ff; /* Light blue background on hover/selection */
+                color: #004085; /* Darker blue text on hover */
+            }
+            QMenu::item:disabled {
+                color: #adb5bd; /* Gray out disabled items */
+                background-color: transparent;
+            }
+            QMenu::separator {
+                height: 1px;
+                background: #ced4da; /* Separator line color */
+                margin-left: 10px;
+                margin-right: 10px;
+                margin-top: 3px;
+                margin-bottom: 3px;
+            }
+            /* --- End Custom Context Menu Styling --- */
             """
         )
         # Set object names for the new labels for potential styling
@@ -429,6 +471,52 @@ class YouTubeDownloaderApp(QWidget):
         # Set initial state for audio format combo
         self.video_format_combo.setCurrentIndex(0)  # Index 0 = Video
         self.audio_format_combo.setCurrentIndex(0)  # Index 0 = Audio
+
+    # --- Show Custom Context Menu for URL Input --- (NEW)
+    def show_url_input_context_menu(self, position):
+        menu = QMenu()
+
+        # Standard actions from QLineEdit
+        undo_action = menu.addAction("Undo")
+        undo_action.triggered.connect(self.url_input.undo)
+        undo_action.setEnabled(self.url_input.isUndoAvailable())
+
+        redo_action = menu.addAction("Redo")
+        redo_action.triggered.connect(self.url_input.redo)
+        redo_action.setEnabled(self.url_input.isRedoAvailable())
+
+        menu.addSeparator()
+
+        cut_action = menu.addAction("Cut")
+        cut_action.triggered.connect(self.url_input.cut)
+        cut_action.setEnabled(self.url_input.hasSelectedText())
+
+        copy_action = menu.addAction("Copy")
+        copy_action.triggered.connect(self.url_input.copy)
+        copy_action.setEnabled(self.url_input.hasSelectedText())
+
+        paste_action = menu.addAction("Paste")
+        paste_action.triggered.connect(self.url_input.paste)
+        paste_action.setEnabled(bool(QApplication.clipboard().text()))
+
+        delete_action = menu.addAction("Delete")
+        delete_action.triggered.connect(
+            self.url_input.del_
+        )  # Note: 'del' is a keyword, method is 'del_'
+        delete_action.setEnabled(self.url_input.hasSelectedText())
+
+        menu.addSeparator()
+
+        select_all_action = menu.addAction("Select All")
+        select_all_action.triggered.connect(self.url_input.selectAll)
+        select_all_action.setEnabled(
+            bool(self.url_input.text())
+        )  # Enable if there is text
+
+        # Execute the menu - requires mapping the position
+        menu.exec(self.url_input.mapToGlobal(position))
+
+    # --- End Custom Context Menu ---
 
     # --- Helper to Style ComboBox Scrollbars --- (NEW)
     def style_combobox_scrollbar(self, combobox):
@@ -445,7 +533,7 @@ class YouTubeDownloaderApp(QWidget):
                 min-height: 20px;   /* Minimum handle height */
             }
             QScrollBar::handle:vertical:hover {
-                background: #a0a0a0; /* Color on hover */
+                background: #e7816b; /* Color on hover */
             }
             QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
                 border: none;
@@ -511,6 +599,7 @@ class YouTubeDownloaderApp(QWidget):
         self.fetched_formats = result.get("formats", [])
         info = result.get("info", {})
         video_title = info.get("title", "Video")
+        self.current_video_title = video_title
         self.title_label.setText(
             f"Formats for: {video_title[:50]}{'...' if len(video_title) > 50 else ''}"
         )
@@ -691,47 +780,117 @@ class YouTubeDownloaderApp(QWidget):
 
     # --- End handle_download ---
 
-    # --- on_download_finished --- (MODIFIED - Adjust message)
+    # --- on_download_finished --- (MODIFIED - Added Renaming Logic)
     def on_download_finished(self, result):
-        self.fetch_formats_button.setEnabled(True)  # Re-enable fetch button
-        if self.title_label.text().startswith(
-            "Starting download..."
-        ):  # Clear download status title
+        self.fetch_formats_button.setEnabled(True)
+        if self.title_label.text().startswith("Starting download..."):
             self.title_label.setText(" ")
         self.speed_label.setText("Speed: N/A")
-        # ... (rest of on_download_finished unchanged) ...
-        if not result["status"] or not result["filepath"]:
+
+        new_filepath = None  # To store the path after potential rename
+
+        if result["status"] and result["filepath"]:
+            original_filepath = result["filepath"]
+            # --- Renaming Logic --- START ---
+            try:
+                # Determine selected format description
+                format_desc = ""
+                format_data = ""
+                if self.video_radio.isChecked():
+                    format_desc = self.video_format_combo.currentText()
+                    format_data = self.video_format_combo.currentData()
+                elif self.audio_radio.isChecked():
+                    format_desc = self.audio_format_combo.currentText()
+                    format_data = self.audio_format_combo.currentData()
+
+                # Only rename if a specific format was selected (not 'Best Available')
+                # and we have a title stored
+                if format_data not in ["bv", "ba"] and self.current_video_title:
+                    base_title = self.current_video_title
+                    # Simplify format description (remove size estimate)
+                    format_part = re.sub(r"\s*\([^)]*Size\)$", "", format_desc).strip()
+                    sanitized_title = self.sanitize_filename(base_title)
+                    sanitized_format = self.sanitize_filename(format_part)
+                    # Get extension from original path
+                    _, ext = os.path.splitext(original_filepath)
+                    # Construct new name
+                    new_filename = f"{sanitized_title} - {sanitized_format}{ext}"
+                    new_filepath_attempt = os.path.join(
+                        self.current_download_dir, new_filename
+                    )
+
+                    # Rename the file
+                    if original_filepath != new_filepath_attempt:
+                        if os.path.exists(new_filepath_attempt):
+                            # Handle existing file (e.g., add counter, overwrite, or skip)
+                            # For now, just log a warning and don't rename
+                            print(
+                                f"Warning: File '{new_filename}' already exists. Skipping rename."
+                            )
+                            new_filepath = original_filepath  # Keep original path
+                        else:
+                            os.rename(original_filepath, new_filepath_attempt)
+                            new_filepath = (
+                                new_filepath_attempt  # Update path to new one
+                            )
+                            print(
+                                f"Renamed '{os.path.basename(original_filepath)}' to '{new_filename}'"
+                            )
+                    else:
+                        new_filepath = original_filepath  # No rename needed
+                else:
+                    # Keep original path if 'Best Available' or no title
+                    new_filepath = original_filepath
+            except Exception as e:
+                print(f"Error during file rename: {e}")
+                QMessageBox.warning(
+                    self,
+                    "Rename Warning",
+                    f"Could not rename file after download:\n{e}",
+                )
+                new_filepath = original_filepath  # Fallback to original path
+            # --- Renaming Logic --- END ---
+
+            # Update result with the potentially new filepath
+            result["filepath"] = new_filepath
+
+            # Update UI based on the final filepath
+            if new_filepath:
+                try:
+                    size_bytes = os.path.getsize(new_filepath)
+                    size_str = self.format_bytes(size_bytes)
+                    self.size_label.setText(f"Size: {size_str} / {size_str}")
+                except Exception:
+                    self.size_label.setText("Size: N/A")  # Reset if error getting size
+            else:  # If filepath became None due to rename error
+                self.size_label.setText("Size: N/A")
+                self.last_download_label.setText("Last download: Failed (Rename Error)")
+
+        elif not result["status"]:
             self.size_label.setText("Size: N/A")
             self.last_download_label.setText("Last download: Failed")
-        else:
-            try:
-                filepath = result["filepath"]
-                size_bytes = os.path.getsize(filepath)
-                size_str = self.format_bytes(size_bytes)
-                self.size_label.setText(f"Size: {size_str} / {size_str}")
-            except Exception:
-                pass
+
+        # Enable download button regardless of rename success/failure
         self.download_button.setEnabled(True)
         self.download_button.setText("Download Now")
+
+        # Show success message ONLY if status is True and we have a final filepath
         if result["status"] and result["filepath"]:
             self.url_input.clear()
-            filepath = result["filepath"]
-            filename = os.path.basename(filepath)
-            self.last_download_label.setText(f"Last download: {filename}")
+            final_filepath = result["filepath"]
+            final_filename = os.path.basename(final_filepath)
+            self.last_download_label.setText(f"Last download: {final_filename}")
             size_mb = 0
             try:
-                size_bytes = os.path.getsize(filepath)
+                size_bytes = os.path.getsize(final_filepath)
                 if size_bytes > 0:
                     size_mb = size_bytes / (1024 * 1024)
             except OSError:
                 pass
             size_str_msg = f"{size_mb:.2f} MB" if size_mb > 0 else "Unknown Size"
 
-            # Determine download type for message
             download_type_msg = "video"
-            # Simple check: if filename ends with common audio extensions assume audio only
-            # This isn't perfect but good enough for the message
-            if filename.lower().endswith(
+            if final_filename.lower().endswith(  # Check final filename
                 (".m4a", ".mp3", ".opus", ".ogg", ".wav", ".aac", ".flac")
             ):
                 download_type_msg = "audio"
@@ -740,9 +899,12 @@ class YouTubeDownloaderApp(QWidget):
             msg.setWindowTitle("✅ Download Complete")
             msg.setIcon(QMessageBox.Icon.Information)
             msg.setTextFormat(Qt.TextFormat.RichText)
-            msg.setText(f"<b>{filename}</b><br><small>Size: {size_str_msg}</small>")
+            # Show the FINAL filename in the message
+            msg.setText(
+                f"<b>{final_filename}</b><br><small>Size: {size_str_msg}</small>"
+            )
             msg.setInformativeText(
-                f"Your {download_type_msg} has been saved successfully to:\n{os.path.dirname(filepath)}"
+                f"Your {download_type_msg} has been saved successfully to:\n{os.path.dirname(final_filepath)}"
             )
             msg.setStyleSheet("QPushButton{min-width: 100px;}")
             text_label = msg.findChild(QLabel, "qt_msgbox_label")
@@ -758,12 +920,28 @@ class YouTubeDownloaderApp(QWidget):
             msg.exec()
             if msg.clickedButton() == open_btn:
                 self.open_folder()
-        else:
-            if not self.last_download_label.text():
+        elif not result["status"]:
+            # Keep failure message logic simple
+            if not self.last_download_label.text().endswith("Failed"):
                 self.last_download_label.setText("Last download: Failed")
-            QMessageBox.critical(self, "Download Failed", result["message"])
+            QMessageBox.critical(
+                self, "Download Failed", result.get("message", "Unknown error")
+            )
 
     # --- End on_download_finished ---
+
+    # --- Add sanitize_filename helper method ---
+    def sanitize_filename(self, filename):
+        # Remove invalid characters for Windows filenames
+        sanitized = re.sub(r'[\\/:*?"<>|]', "", filename)
+        # Replace spaces with underscores (optional, but common)
+        # sanitized = sanitized.replace(' ', '_')
+        # Limit length (optional)
+        # max_len = 100
+        # sanitized = sanitized[:max_len]
+        return sanitized
+
+    # --- End sanitize_filename ---
 
     # --- open_folder --- (unchanged)
     def open_folder(self):
