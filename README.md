@@ -10,7 +10,7 @@
 Download YouTube videos and audio easily with this free, open-source graphical user interface (GUI) application. Built with Python and PyQt6, it leverages the powerful `yt-dlp` library to provide a simple way to save YouTube content directly to your computer (Windows, macOS, Linux).
 
 <p align="center">
-  <img alt="Screenshot" src="https://github.com/user-attachments/assets/efe0072d-d0ee-4eda-922b-f0b398e82c54">
+  <img alt="Screenshot" src="assets/screenshot.png">
 </p>
 
 ## Table of Contents
