@@ -44,7 +44,7 @@ class YTVideoDownloader:
 
         os.makedirs(self.download_dir, exist_ok=True)
 
-        self.log_path = os.path.join(self.output_path, "yt_video_downloader.log")
+        self.log_path = os.path.join(self.output_path, "youtube_downloader.log")
         self.setup_logger()
 
         self.use_rich = use_rich
