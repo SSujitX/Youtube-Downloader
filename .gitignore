@@ -10,6 +10,7 @@ wheels/
 # ignore files folder
 yt_video_downloader.log
 downloaded_videos/
+youtube downloader gui screenshot.png
 
 # Virtual environments
 .venv
