@@ -4,7 +4,7 @@
   <a href="https://github.com/SSujitX/Youtube-Downloader/releases/latest"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SSujitX/Youtube-Downloader"></a>
   <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
   <img alt="Python Version" src="https://img.shields.io/badge/python-3.9%2B-blue.svg">
-  <img alt="Visitor Count" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FSSujitX%2FYoutube-Downloader&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+  <a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2FSSujitX%2FYoutube-Downloader"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FSSujitX%2FYoutube-Downloader&label=Visitors&countColor=%23263759&style=flat" /></a>
 </p>
 
 Download YouTube videos and audio easily with this free, open-source graphical user interface (GUI) application. Built with Python and PyQt6, it leverages the powerful `yt-dlp` library to provide a simple way to save YouTube content directly to your computer (Windows, macOS, Linux).
