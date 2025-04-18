@@ -1,3 +1,3 @@
-pyinstaller --noconfirm --onedir --windowed --icon "yt.ico" --add-data "yt.png;." --add-data "ffmpeg;ffmpeg" youtube_gui.py
+pyinstaller --noconfirm --onedir --windowed --icon "yt.ico" --add-data "yt.png;." --add-data "ffmpeg;ffmpeg" youtube_downloader.py
 
-pyinstaller --noconfirm --onefile --windowed --icon "yt.ico" --add-data "yt.png;." --add-data "ffmpeg;ffmpeg" youtube_gui.py
+pyinstaller --noconfirm --onefile --windowed --icon "yt.ico" --add-data "yt.png;." --add-data "ffmpeg;ffmpeg" youtube_downloader.py
