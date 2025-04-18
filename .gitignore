@@ -8,7 +8,7 @@ wheels/
 *.egg
 
 # ignore files folder
-yt_video_downloader.log
+youtube_downloader.log
 downloaded_videos/
 
 # Virtual environments
