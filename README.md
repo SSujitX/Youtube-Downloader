@@ -1,10 +1,28 @@
-![](https://api.visitorbadge.io/api/VisitorHit?user=SSujitX&repo=youtube-downloader&countColor=%237B1E7A)
-
 # YouTube Downloader GUI - Free & Open-Source Video/Audio Downloader
+
+<p align="center">
+  <a href="https://github.com/SSujitX/Youtube-Downloader/releases/latest"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/SSujitX/Youtube-Downloader"></a>
+  <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+  <img alt="Python Version" src="https://img.shields.io/badge/python-3.9%2B-blue.svg">
+  <img alt="Visitor Count" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FSSujitX%2FYoutube-Downloader&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false">
+</p>
 
 Download YouTube videos and audio easily with this free, open-source graphical user interface (GUI) application. Built with Python and PyQt6, it leverages the powerful `yt-dlp` library to provide a simple way to save YouTube content directly to your computer (Windows, macOS, Linux).
 
-![Screenshot](https://github.com/user-attachments/assets/efe0072d-d0ee-4eda-922b-f0b398e82c54)
+<p align="center">
+  <img alt="Screenshot" src="https://github.com/user-attachments/assets/efe0072d-d0ee-4eda-922b-f0b398e82c54">
+</p>
+
+## Table of Contents
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Using the Executable (Windows)](#using-the-executable-windows)
+  - [Running from Source](#running-from-source)
+- [Building the Executable (Optional)](#building-the-executable-optional)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
 ## Features
 
@@ -90,6 +108,16 @@ If you want to build the executable yourself:
     - `--add-data "yt.ico;."` or `--add-data "yt.png;."`: Bundles the icon file.
 
     The executable will be located in the `dist` folder.
+
+## Contributing
+
+Contributions are welcome! If you have suggestions for improvements or find any bugs, please feel free to open an issue or submit a pull request.
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
 
 ## License
 
