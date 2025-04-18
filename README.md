@@ -1,9 +1,8 @@
-# YouTube Downloader GUI
+# YouTube Downloader GUI - Free & Open-Source Video/Audio Downloader
 
-A simple graphical user interface (GUI) application built with Python and PyQt6 to download YouTube videos and audio using the powerful `yt-dlp` library.
+Download YouTube videos and audio easily with this free, open-source graphical user interface (GUI) application. Built with Python and PyQt6, it leverages the powerful `yt-dlp` library to provide a simple way to save YouTube content directly to your computer (Windows, macOS, Linux).
 
-<!-- Optional: Add a screenshot link here -->
-<!-- ![Screenshot](link/to/your/screenshot.png) -->
+[Screenshot](https://github.com/user-attachments/assets/efe0072d-d0ee-4eda-922b-f0b398e82c54)
 
 ## Features
 
