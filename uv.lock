@@ -259,8 +259,8 @@ wheels = [
 ]
 
 [[package]]
-name = "youtube-video-downloader"
-version = "0.1.0"
+name = "youtube-downloader"
+version = "1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "patool" },
