@@ -109,7 +109,7 @@ class YTVideoDownloader:
             return {"status": False, "message": f"Failed to fetch formats: {e}"}
 
     def download_video(self, url: str, format_string: str | None = None) -> dict:
-        ffmpeg_path = os.path.join(self.resource_path, "ffmpeg", "bin", "ffmpeg.exe")
+        ffmpeg_path = os.path.join(self.resource_path, "ffmpeg", "ffmpeg.exe")
         final_path = {"file": None}
         task_id = [None]
 
