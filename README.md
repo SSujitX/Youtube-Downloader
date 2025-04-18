@@ -111,13 +111,13 @@ If you want to build the executable yourself:
 
 ## Contributing
 
-Contributions are welcome! If you have suggestions for improvements or find any bugs, please feel free to open an issue or submit a pull request.
+Contributions are welcome! If you have suggestions for improvements or find any bugs, please feel free to open an issue or submit a pull request directly against the `master` branch.
 
 1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+2.  Make your changes
+3.  Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
+4.  Push to your Fork (`git push origin master`)
+5.  Open a Pull Request targeting the `master` branch of this repository.
 
 ## License
 
