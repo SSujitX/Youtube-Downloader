@@ -41,8 +41,9 @@ A simple graphical user interface (GUI) application built with Python and PyQt6 
 2.  **Clone the repository:**
 
     ```bash
-    git clone <your-repository-url>
-    cd <repository-folder>
+    git clone https://github.com/SSujitX/Youtube-Downloader.git
+    cd Youtube-Downloader
+
     ```
 
 3.  **Install dependencies:**
