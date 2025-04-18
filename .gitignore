@@ -10,6 +10,7 @@ wheels/
 # ignore files folder
 youtube_downloader.log
 downloaded_videos/
+youtube_downloader.spec
 
 # Virtual environments
 .venv
