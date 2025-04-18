@@ -7,7 +7,7 @@ wheels/
 *.egg-info
 *.egg
 
-# files folder
+# ignore files folder
 yt_video_downloader.log
 downloaded_videos/
 
