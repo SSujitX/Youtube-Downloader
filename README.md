@@ -25,7 +25,7 @@ A simple graphical user interface (GUI) application built with Python and PyQt6 
 
 ### Using the Executable (Windows)
 
-1.  Download the latest `.exe` file from the [Releases](link/to/your/releases) page.
+1.  Download the latest `.exe` file from the [Releases](https://github.com/SSujitX/Youtube-Downloader/releases/tag/1.0) page.
 2.  Double-click the downloaded `.exe` file to run the application. No installation is required.
 
     **Note on Virus Detection:** Executables created with tools like PyInstaller are sometimes flagged as potentially unwanted programs (PUPs) or viruses by antivirus software. This can happen because the executable bundles Python and its libraries, which might trigger heuristic detection. The use of modules like `os` and `subprocess` for file system interaction (like opening the download folder) can also contribute. The code is open-source, so you can inspect it yourself. If you encounter a warning, you may need to add an exception in your antivirus software.
