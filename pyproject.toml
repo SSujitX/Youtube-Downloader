@@ -1,6 +1,6 @@
 [project]
 name = "youtube-downloader"
-version = "1.0"
+version = "1.1"
 description = "A desktop application for downloading YouTube videos and audio using a simple PyQt6 interface. Supports multiple formats and batch downloads with progress feedback."
 readme = "README.md"
 requires-python = ">=3.13"
