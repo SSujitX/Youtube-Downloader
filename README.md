@@ -1,3 +1,5 @@
+![](https://api.visitorbadge.io/api/VisitorHit?user=SSujitX&Youtube-Downloader&countColor=%237B1E7A)
+
 # YouTube Downloader GUI - Free & Open-Source Video/Audio Downloader
 
 Download YouTube videos and audio easily with this free, open-source graphical user interface (GUI) application. Built with Python and PyQt6, it leverages the powerful `yt-dlp` library to provide a simple way to save YouTube content directly to your computer (Windows, macOS, Linux).
