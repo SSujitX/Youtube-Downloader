@@ -34,8 +34,8 @@ A simple graphical user interface (GUI) application built with Python and PyQt6 
 
 1.  **Prerequisites:**
 
-    - Python 3.8 or later.
-    - `pip` (Python package installer).
+    - Python 3.13 or later (as specified in `pyproject.toml`).
+    - `uv` (Python package installer and virtual environment manager). You can install it following the instructions [here](https://github.com/astral-sh/uv#installation).
     - `ffmpeg` (Required by `yt-dlp` for merging formats). Make sure it's installed and accessible in your system's PATH, or place the `ffmpeg.exe` (and related `.dll` files) in the `ffmpeg/bin` subdirectory alongside `downloader.py` if running from source, or ensure the PyInstaller build includes it correctly.
 
 2.  **Clone the repository:**
@@ -43,46 +43,50 @@ A simple graphical user interface (GUI) application built with Python and PyQt6 
     ```bash
     git clone https://github.com/SSujitX/Youtube-Downloader.git
     cd Youtube-Downloader
-
     ```
 
-3.  **Install dependencies:**
+3.  **Create a virtual environment and install dependencies:**
+
+    It's recommended to use a virtual environment. `uv` can create one and sync dependencies from `pyproject.toml` and `uv.lock` in one step:
 
     ```bash
-    pip install -r requirements.txt
-    ```
-
-    _(You'll need to create a `requirements.txt` file. Based on your imports, it should contain at least:)_
-
-    ```
-    PyQt6>=6.0.0
-    yt-dlp>=2023.0.0
-    rich>=10.0.0
+    # Create a virtual environment named .venv (if it doesn't exist)
+    # and install dependencies from pyproject.toml/uv.lock
+    uv sync
     ```
 
 4.  **Run the application:**
+
+    Activate the virtual environment first (the command depends on your shell, e.g., `.venv\\Scripts\\activate` on Windows Command Prompt/PowerShell, or `source .venv/bin/activate` on Linux/macOS/Git Bash). Then run:
+
     ```bash
-    python youtube_gui.py
+    # Or, run directly using uv without activating the environment
+    uv run python youtube_gui.py
     ```
 
 ## Building the Executable (Optional)
 
 If you want to build the executable yourself:
 
-1.  Install PyInstaller: `pip install pyinstaller`
-2.  Ensure `ffmpeg` binaries are correctly placed (e.g., in an `ffmpeg/bin` folder).
-3.  Ensure the icon file (`yt.png`) is present.
-4.  Run PyInstaller (adjust paths and options as needed):
+1.  Ensure `uv` is installed and you have synced the environment (`uv sync`).
+2.  Install PyInstaller into your environment: `uv run pip install pyinstaller`
+3.  Ensure `ffmpeg` binaries are correctly placed (e.g., in an `ffmpeg/bin` folder).
+4.  Ensure the icon file (`yt.ico` or `yt.png`) is present.
+5.  Run PyInstaller using `uv run` (adjust paths and options as needed):
 
     ```bash
-    pyinstaller --onefile --windowed --icon=yt.png --add-data "ffmpeg;ffmpeg" --add-data "yt.png;." youtube_gui.py
+    # Example using yt.ico
+    uv run pyinstaller --onefile --windowed --icon=yt.ico --add-data "ffmpeg;ffmpeg" --add-data "yt.ico;." youtube_gui.py
+
+    # Example using yt.png
+    # uv run pyinstaller --onefile --windowed --icon=yt.png --add-data "ffmpeg;ffmpeg" --add-data "yt.png;." youtube_gui.py
     ```
 
     - `--onefile`: Creates a single executable file.
     - `--windowed`: Prevents the console window from appearing.
     - `--icon`: Sets the application icon.
     - `--add-data "ffmpeg;ffmpeg"`: Bundles the `ffmpeg` directory.
-    - `--add-data "yt.png;."`: Bundles the icon file.
+    - `--add-data "yt.ico;."` or `--add-data "yt.png;."`: Bundles the icon file.
 
     The executable will be located in the `dist` folder.
 
