@@ -144,7 +144,7 @@ class YouTubeDownloaderApp(QWidget):
 
         self.setWindowTitle("Youtube Downloader")
         # Adjust height for the new settings layout
-        self.setFixedSize(600, 660)
+        self.setFixedSize(600, 670)
 
         self.setWindowFlags(
             self.windowFlags() & ~Qt.WindowType.WindowMaximizeButtonHint
@@ -186,7 +186,7 @@ class YouTubeDownloaderApp(QWidget):
                     YouTube Downloader
                 </div>
                     <div style="font-size: 10pt; color: #6e4414; margin-top: 5px;">
-                        Developed by Sujit Biswas - 
+                        Developed by Sujit - 
                         <a href="https://github.com/SSujitX"
                            style="color: #2d8bff; text-decoration: none; font-weight: 500;">
                             GitHub
